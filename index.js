@@ -1,7 +1,12 @@
 import express from 'express';
+import dotenv from 'dotenv';
+
+// Load environment variable from .env file to process.env
+dotenv.config();
 
 const app = express();
-const PORT = 4321;
+console.log(process.env);
+const PORT = process.env.PORT || 3003;
 
 app.get('/', (req, res) => {
   res.send('Hello Noders');
