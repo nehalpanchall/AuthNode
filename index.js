@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // Load environment variable from .env file to process.env
 dotenv.config();
@@ -19,6 +20,13 @@ app.get('/nehal', (req, res) => {
 app.get('/panchal', (req, res) => {
   res.send('Route to Panchal');
 });
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
+);
 
 app.listen(PORT, () => {
   console.log(`Node server is running on port number: ${PORT}`);
