@@ -1,0 +1,26 @@
+{
+  "name": "authnode",
+  "version": "1.0.0",
+  "description": "a complete authentication using MERN stack",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "git": "git status"
+  },
+  "keywords": [
+    "Ract",
+    "Express",
+    "JavaScript",
+    "Node",
+    "Git",
+    "Github",
+    "Nodemon",
+    "MangoDB"
+  ],
+  "author": "Nehal Panchal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
