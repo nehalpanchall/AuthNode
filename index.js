@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import mongoose from 'mongoose';
+
+import { dbConnect } from './utils/dbConnection.js';
 
 // Load environment variable from .env file to process.env
 dotenv.config();
@@ -9,7 +10,6 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 3003;
-const MongoDB_URL = process.env.MONGODB_URL;
 
 app.get('/', (req, res) => {
   res.send('Hello Noders');
@@ -30,14 +30,8 @@ app.use(
   })
 );
 
-mongoose
-  .connect(MongoDB_URL)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.log('MongoDB connection error:');
-  });
+// Database connection
+await dbConnect();
 
 app.listen(PORT, () => {
   console.log(`Node server is running on port number: ${PORT}`);
