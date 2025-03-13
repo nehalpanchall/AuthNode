@@ -53,6 +53,22 @@ const userVerify = async (req, res) => {
 
   try {
     const userObj = await User.findOne({ verificationToken: token });
+
+    if (!userObj) {
+      res.status(400).json({ message: 'Invalid or Expired Token' });
+    }
+
+    if (userObj.isVerified) {
+      res.status(400).json({ message: 'User is already verified' });
+    }
+
+    userObj.isVerified = true;
+    userObj.verificationToken = null;
+    await userObj.save();
+
+    return res
+      .status(200)
+      .json({ message: 'User verified successfully', status: 'Verified' });
   } catch (error) {
     res.status(500).json({
       message: 'Something went wrong in verify user',
