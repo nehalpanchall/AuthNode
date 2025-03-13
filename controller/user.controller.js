@@ -1,5 +1,8 @@
 const userRegister = async (req, res) => {
-  res.send('user has been registered!');
+  // 1. Get the data from request body
+  const { userName, email, password } = req.body;
+
+  res.status(200).json({ message: 'get data from body' });
 };
 
 export { userRegister };
