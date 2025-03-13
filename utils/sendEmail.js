@@ -18,7 +18,7 @@ const sendEmail = async (token, userEmail) => {
     from: process.env.MAILTRAP_SENDER, // sender address
     to: userEmail, // list of receivers
     subject: 'Account Verification Link ✔', // Subject line
-    text: `Please click the link below to verify your email: ${process.env.BASE_URL}/api/v1/users/${token}`,
+    text: `Please click the link below to verify your email: ${process.env.BASE_URL}/api/v1/users/verify/${token}`,
   };
 
   transporter.sendMail(mailOptions);
