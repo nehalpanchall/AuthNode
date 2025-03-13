@@ -50,6 +50,15 @@ const userRegister = async (req, res) => {
 
 const userVerify = async (req, res) => {
   const { token } = req.params;
+
+  try {
+    const userObj = await User.findOne({ verificationToken: token });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something went wrong in verify user',
+      error: error.message,
+    });
+  }
 };
 
 export { userRegister, userVerify };
