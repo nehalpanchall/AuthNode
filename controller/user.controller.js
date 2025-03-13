@@ -1,7 +1,7 @@
 import User from '../model/User.model.js';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import sendEmail from '../utils/sendEmail.js';
 
 dotenv.config();
 
@@ -36,24 +36,7 @@ const userRegister = async (req, res) => {
       await newUser.save();
 
       // 7. send token to the user via email (nodemailer and mailtrap)
-      const transporter = nodemailer.createTransport({
-        host: process.env.MAILTRAP_HOST,
-        port: process.env.MAILTRAP_PORT,
-        secure: false, // true for port 465, false for other ports
-        auth: {
-          user: process.env.MAILTRAP_USER,
-          pass: process.env.MAILTRAP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: process.env.MAILTRAP_SENDER, // sender address
-        to: newUser.email, // list of receivers
-        subject: 'Account Verification Link ✔', // Subject line
-        text: `Please click the link below to verify your email: ${process.env.BASE_URL}/api/v1/users/${token}`,
-      };
-
-      await transporter.sendMail(mailOptions);
+      await sendEmail(token, newUser.email);
     } else {
       res.status(400).json({ message: 'user already exist' });
     }
