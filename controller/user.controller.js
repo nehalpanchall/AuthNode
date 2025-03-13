@@ -41,8 +41,15 @@ const userRegister = async (req, res) => {
       res.status(400).json({ message: 'user already exist' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error in registration process' });
+    res.status(500).json({
+      message: 'Server error in registration process',
+      error: error.message,
+    });
   }
 };
 
-export { userRegister };
+const userVerify = async (req, res) => {
+  const { token } = req.params;
+};
+
+export { userRegister, userVerify };
