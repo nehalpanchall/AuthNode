@@ -13,21 +13,25 @@ const userRegister = async (req, res) => {
   try {
     // 3. check user is already exist or not
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    if (!existingUser) {
+      // 4. if not exist, create new user
+      const newUser = await User.create({ userName, email, password });
+      if (newUser) {
+        res.status(200).json({ message: 'user has been created successfully' });
+      }
+
+      // 5. generate random token using crypto
+      const token = crypto.randomBytes(16).toString('hex');
+
+      if (!token) {
+        res.status(400).json({ message: 'Token does not generated' });
+      }
+
+      // 6. save the token to the user database
+      newUser.verificationToken = token;
+      await newUser.save();
+    } else {
       res.status(400).json({ message: 'user already exist' });
-    }
-
-    // 4. if not exist, create new user
-    const newUser = await User.create({ userName, email, password });
-    if (newUser) {
-      res.status(200).json({ message: 'user has been created successfully' });
-    }
-
-    // 5. generate random token using crypto
-    const token = crypto.randomBytes(16).toString('hex');
-
-    if (!token) {
-      res.status(400).json({ message: 'Token does not generated' });
     }
   } catch (error) {
     res.status(500).json({ message: 'Server error in registration process' });
