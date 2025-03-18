@@ -2,6 +2,7 @@ import User from '../model/User.model.js';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import sendEmail from '../utils/sendEmail.js';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -82,7 +83,7 @@ const userLogin = async (req, res) => {
   const { email, password } = req.body;
 
   // 2. validate data
-  if (!emmail || !password) {
+  if (!email || !password) {
     res.status(400).json({ message: 'Invalid email or password' });
   }
 
@@ -101,6 +102,12 @@ const userLogin = async (req, res) => {
   }
 
   // 5. if verified, check and compare string password and hashed password using bcrypt
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    res.status(400).json({ message: 'Password is incorrect' });
+  }
+
   // 6. generate JWT token and set the data in JWT token
   // 7. set JWT token in cookie-parser
   // 8. send success responses
