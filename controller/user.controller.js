@@ -125,6 +125,7 @@ const userLogin = async (req, res) => {
   res.cookie('jwtToken', jwtToken, cookieOption);
 
   // 8. send success responses
+  return res.status(200).json({ message: 'Login successfully', suceess: true });
 };
 
 export { userRegister, userVerify, userLogin };
