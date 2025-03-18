@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import dotenv from 'dotenv';
 import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -109,6 +110,10 @@ const userLogin = async (req, res) => {
   }
 
   // 6. generate JWT token and set the data in JWT token
+  const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES,
+  });
+
   // 7. set JWT token in cookie-parser
   // 8. send success responses
 };
