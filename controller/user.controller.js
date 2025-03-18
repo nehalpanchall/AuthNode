@@ -125,13 +125,12 @@ const userLogin = async (req, res) => {
     console.log(jwtToken);
 
     // 7. set JWT token in cookie-parser as a response
-    const cookieOption = {
+    const cookieOptions = {
       httpOnly: true,
-      secure: true,
       maxAge: 60 * 60 * 1000, // 1 hour
     };
 
-    res.cookie('jwtToken', jwtToken, cookieOption);
+    res.cookie('jwtToken', jwtToken, cookieOptions);
 
     // 8. send success responses
     return res.status(200).json({
