@@ -84,6 +84,8 @@ const userLogin = async (req, res) => {
   // 1. get login data from body
   const { email, password } = req.body;
 
+  console.log(req.body);
+
   // 2. validate data
   if (!email || !password) {
     res.status(400).json({ message: 'Invalid email or password' });
@@ -92,6 +94,8 @@ const userLogin = async (req, res) => {
   try {
     // 3. check user exist in database or not
     const user = await User.findOne({ email });
+
+    console.log(user);
 
     if (!user) {
       res.status(400).json({ message: 'User does not exist' });
@@ -107,6 +111,8 @@ const userLogin = async (req, res) => {
     // 5. if verified, check and compare string password and hashed password using bcrypt
     const isMatch = await bcrypt.compare(password, user.password);
 
+    console.log(isMatch);
+
     if (!isMatch) {
       res.status(400).json({ message: 'Password is incorrect' });
     }
@@ -115,6 +121,8 @@ const userLogin = async (req, res) => {
     const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES,
     });
+
+    console.log(jwtToken);
 
     // 7. set JWT token in cookie-parser as a response
     const cookieOption = {
@@ -126,9 +134,17 @@ const userLogin = async (req, res) => {
     res.cookie('jwtToken', jwtToken, cookieOption);
 
     // 8. send success responses
-    return res
-      .status(200)
-      .json({ message: 'Login successfully', suceess: true });
+    return res.status(200).json({
+      message: 'Login successfully',
+      suceess: true,
+      user: {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+        userName: user.userName,
+        token: jwtToken,
+      },
+    });
   } catch (error) {
     res
       .status(500)
