@@ -77,7 +77,7 @@ const userVerify = async (req, res) => {
   }
 };
 
-const userLogin = (req, res) => {
+const userLogin = async (req, res) => {
   // 1. get login data from body
   const { email, password } = req.body;
 
@@ -87,6 +87,8 @@ const userLogin = (req, res) => {
   }
 
   // 3. check user exist in database or not
+  const user = await User.findOne({ email });
+
   // 4. if exist, check user account is verified or not
   // 5. if verified, check and compare string password and hashed password using bcrypt
   // 6. generate JWT token and set the data in JWT token
