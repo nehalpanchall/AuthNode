@@ -89,43 +89,51 @@ const userLogin = async (req, res) => {
     res.status(400).json({ message: 'Invalid email or password' });
   }
 
-  // 3. check user exist in database or not
-  const user = await User.findOne({ email });
+  try {
+    // 3. check user exist in database or not
+    const user = await User.findOne({ email });
 
-  if (!user) {
-    res.status(400).json({ message: 'User does not exist' });
-  }
+    if (!user) {
+      res.status(400).json({ message: 'User does not exist' });
+    }
 
-  // 4. if exist, check user account is verified or not
-  if (!user.isVerified) {
+    // 4. if exist, check user account is verified or not
+    if (!user.isVerified) {
+      res
+        .status(400)
+        .json({ message: 'User verification is required before sign in' });
+    }
+
+    // 5. if verified, check and compare string password and hashed password using bcrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      res.status(400).json({ message: 'Password is incorrect' });
+    }
+
+    // 6. generate JWT token and set the data in JWT token
+    const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES,
+    });
+
+    // 7. set JWT token in cookie-parser as a response
+    const cookieOption = {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 1000, // 1 hour
+    };
+
+    res.cookie('jwtToken', jwtToken, cookieOption);
+
+    // 8. send success responses
+    return res
+      .status(200)
+      .json({ message: 'Login successfully', suceess: true });
+  } catch (error) {
     res
-      .status(400)
-      .json({ message: 'User verification is required before sign in' });
+      .status(500)
+      .json({ message: 'Something went wrong in user login', suceess: false });
   }
-
-  // 5. if verified, check and compare string password and hashed password using bcrypt
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (!isMatch) {
-    res.status(400).json({ message: 'Password is incorrect' });
-  }
-
-  // 6. generate JWT token and set the data in JWT token
-  const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES,
-  });
-
-  // 7. set JWT token in cookie-parser as a response
-  const cookieOption = {
-    httpOnly: true,
-    secure: true,
-    maxAge: 60 * 60 * 1000, // 1 hour
-  };
-
-  res.cookie('jwtToken', jwtToken, cookieOption);
-
-  // 8. send success responses
-  return res.status(200).json({ message: 'Login successfully', suceess: true });
 };
 
 export { userRegister, userVerify, userLogin };
