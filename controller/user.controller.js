@@ -89,7 +89,17 @@ const userLogin = async (req, res) => {
   // 3. check user exist in database or not
   const user = await User.findOne({ email });
 
+  if (!user) {
+    res.status(400).json({ message: 'User does not exist' });
+  }
+
   // 4. if exist, check user account is verified or not
+  if (!user.isVerified) {
+    res
+      .status(400)
+      .json({ message: 'User verification is required before sign in' });
+  }
+
   // 5. if verified, check and compare string password and hashed password using bcrypt
   // 6. generate JWT token and set the data in JWT token
   // 7. set JWT token in cookie-parser
