@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import { dbConnect } from './utils/dbConnection.js';
 import userRoute from './routes/user.routes.js';
+import cookieParser from 'cookie-parser';
 
 // Load environment variable from .env file to process.env
 dotenv.config();
@@ -13,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello Noders');

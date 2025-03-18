@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -114,7 +115,15 @@ const userLogin = async (req, res) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 
-  // 7. set JWT token in cookie-parser
+  // 7. set JWT token in cookie-parser as a response
+  const cookieOption = {
+    httpOnly: true,
+    secure: true,
+    maxAge: 60 * 60 * 1000, // 1 hour
+  };
+
+  res.cookie('jwtToken', jwtToken, cookieOption);
+
   // 8. send success responses
 };
 
