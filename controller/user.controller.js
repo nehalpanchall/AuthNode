@@ -120,9 +120,13 @@ const userLogin = async (req, res) => {
     }
 
     // 6. generate JWT token and set the data in JWT token
-    const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES,
-    });
+    const jwtToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES,
+      }
+    );
 
     // 7. set JWT token in cookie-parser as a response
     const cookieOptions = {
