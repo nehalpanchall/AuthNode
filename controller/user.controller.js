@@ -79,6 +79,8 @@ const userVerify = async (req, res) => {
 
 const userLogin = (req, res) => {
   // 1. get login data from body
+  const { email, password } = req.body;
+
   // 2. validate data
   // 3. check user exist in database or not
   // 4. if exist, check user account is verified or not
