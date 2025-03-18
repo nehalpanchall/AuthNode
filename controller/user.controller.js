@@ -72,7 +72,7 @@ const userVerify = async (req, res) => {
     }
 
     userObj.isVerified = true;
-    userObj.verificationToken = null;
+    userObj.verificationToken = undefined;
     await userObj.save();
 
     return res
