@@ -77,4 +77,15 @@ const userVerify = async (req, res) => {
   }
 };
 
-export { userRegister, userVerify };
+const userLogin = (req, res) => {
+  // 1. get login data from body
+  // 2. validate data
+  // 3. check user exist in database or not
+  // 4. if exist, check user account is verified or not
+  // 5. if verified, check and compare string password and hashed password using bcrypt
+  // 6. generate JWT token and set the data in JWT token
+  // 7. set JWT token in cookie-parser
+  // 8. send success responses
+};
+
+export { userRegister, userVerify, userLogin };
