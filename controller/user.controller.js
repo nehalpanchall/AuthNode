@@ -82,6 +82,10 @@ const userLogin = (req, res) => {
   const { email, password } = req.body;
 
   // 2. validate data
+  if (!emmail || !password) {
+    res.status(400).json({ message: 'Invalid email or password' });
+  }
+
   // 3. check user exist in database or not
   // 4. if exist, check user account is verified or not
   // 5. if verified, check and compare string password and hashed password using bcrypt
