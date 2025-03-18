@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -14,7 +13,7 @@ const userRegister = async (req, res) => {
 
   // 2. Validate data
   if (!userName || !email || !password) {
-    res.status(400).json({ message: 'invalid user info' });
+    return res.status(400).json({ message: 'invalid user info' });
   }
 
   try {
@@ -24,14 +23,16 @@ const userRegister = async (req, res) => {
       // 4. if not exist, create new user
       const newUser = await User.create({ userName, email, password });
       if (newUser) {
-        res.status(200).json({ message: 'user has been created successfully' });
+        return res
+          .status(200)
+          .json({ message: 'user has been created successfully' });
       }
 
       // 5. generate random token using crypto
       const token = crypto.randomBytes(16).toString('hex');
 
       if (!token) {
-        res.status(400).json({ message: 'Token does not generated' });
+        return res.status(400).json({ message: 'Token does not generated' });
       }
 
       // 6. save the token to the user database
@@ -40,11 +41,16 @@ const userRegister = async (req, res) => {
 
       // 7. send token to the user via email (nodemailer and mailtrap)
       await sendEmail(token, newUser.email);
+
+      return res.status(200).json({
+        message: 'User registration completed',
+        success: true,
+      });
     } else {
-      res.status(400).json({ message: 'user already exist' });
+      return res.status(400).json({ message: 'user already exist' });
     }
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Server error in registration process',
       error: error.message,
     });
@@ -58,11 +64,11 @@ const userVerify = async (req, res) => {
     const userObj = await User.findOne({ verificationToken: token });
 
     if (!userObj) {
-      res.status(400).json({ message: 'Invalid or Expired Token' });
+      return res.status(400).json({ message: 'Invalid or Expired Token' });
     }
 
     if (userObj.isVerified) {
-      res.status(400).json({ message: 'User is already verified' });
+      return res.status(400).json({ message: 'User is already verified' });
     }
 
     userObj.isVerified = true;
@@ -71,9 +77,9 @@ const userVerify = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: 'User verified successfully', status: 'Verified' });
+      .json({ message: 'User verified successfully', success: true });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Something went wrong in verify user',
       error: error.message,
     });
@@ -84,26 +90,22 @@ const userLogin = async (req, res) => {
   // 1. get login data from body
   const { email, password } = req.body;
 
-  console.log(req.body);
-
   // 2. validate data
   if (!email || !password) {
-    res.status(400).json({ message: 'Invalid email or password' });
+    return res.status(400).json({ message: 'Invalid email or password' });
   }
 
   try {
     // 3. check user exist in database or not
     const user = await User.findOne({ email });
 
-    console.log(user);
-
     if (!user) {
-      res.status(400).json({ message: 'User does not exist' });
+      return res.status(400).json({ message: 'User does not exist' });
     }
 
     // 4. if exist, check user account is verified or not
     if (!user.isVerified) {
-      res
+      return res
         .status(400)
         .json({ message: 'User verification is required before sign in' });
     }
@@ -111,18 +113,16 @@ const userLogin = async (req, res) => {
     // 5. if verified, check and compare string password and hashed password using bcrypt
     const isMatch = await bcrypt.compare(password, user.password);
 
-    console.log(isMatch);
+    // console.log('password matched: ', isMatch ? 'Yes' : 'No');
 
     if (!isMatch) {
-      res.status(400).json({ message: 'Password is incorrect' });
+      return res.status(400).json({ message: 'Password is incorrect' });
     }
 
     // 6. generate JWT token and set the data in JWT token
     const jwtToken = jwt.sign({ email, password }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES,
     });
-
-    console.log(jwtToken);
 
     // 7. set JWT token in cookie-parser as a response
     const cookieOptions = {
@@ -145,9 +145,11 @@ const userLogin = async (req, res) => {
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Something went wrong in user login', suceess: false });
+    return res.status(500).json({
+      message: 'Something went wrong in user login',
+      suceess: false,
+      error: error.message,
+    });
   }
 };
 
