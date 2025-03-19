@@ -165,6 +165,17 @@ const userProfile = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: 'Invalid user id', success: false });
   }
+
+  try {
+    // 3. find user object match with user id and exclude password
+    const user = await User.findOne({ _id: id }).select('-password');
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: 'User not found!', success: false });
+    }
+  } catch (error) {}
 };
 
 export { userRegister, userVerify, userLogin, userProfile };
