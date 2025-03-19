@@ -158,7 +158,10 @@ const userLogin = async (req, res) => {
 };
 
 const userProfile = async (req, res) => {
-  console.log('user object from request: ', req.user);
+  // 1. get the user id from request.user object
+  // 2. validate the user id
+  // 3. find user object match with user id
+  // 4. return sucess message with user data except password
 };
 
 export { userRegister, userVerify, userLogin, userProfile };
