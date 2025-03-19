@@ -159,9 +159,12 @@ const userLogin = async (req, res) => {
 
 const userProfile = async (req, res) => {
   // 1. get the user id from request.user object
+  const { id } = req.user;
+
   // 2. validate the user id
-  // 3. find user object match with user id
-  // 4. return sucess message with user data except password
+  if (!id) {
+    return res.status(400).json({ message: 'Invalid user id', success: false });
+  }
 };
 
 export { userRegister, userVerify, userLogin, userProfile };
