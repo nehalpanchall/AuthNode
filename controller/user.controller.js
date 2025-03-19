@@ -188,6 +188,20 @@ const userProfile = async (req, res) => {
   }
 };
 
-const userLogout = async (req, res) => {};
+const userLogout = async (req, res) => {
+  try {
+    // new Date(0):  January 1, 1970, 00:00:00 UTC
+    res.cookie('jwtToken', '', { expires: new Date(0) }); // Unix Time Zero
+
+    return res
+      .status(200)
+      .json({ message: 'User logged out successfully', success: true });
+  } catch (error) {
+    return res.status(403).json({
+      message: 'Something went wrong while logging out user',
+      success: false,
+    });
+  }
+};
 
 export { userRegister, userVerify, userLogin, userProfile, userLogout };
