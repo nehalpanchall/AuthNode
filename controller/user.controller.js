@@ -175,7 +175,17 @@ const userProfile = async (req, res) => {
         .status(400)
         .json({ message: 'User not found!', success: false });
     }
-  } catch (error) {}
+
+    // 4. return sucess message with user data except password
+    return res
+      .status(200)
+      .json({ message: 'User profile', success: true, user });
+  } catch (error) {
+    return res.status(403).json({
+      message: 'Something went wrong to access user profile',
+      success: false,
+    });
+  }
 };
 
 export { userRegister, userVerify, userLogin, userProfile };
