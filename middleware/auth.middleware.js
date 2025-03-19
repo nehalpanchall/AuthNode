@@ -22,6 +22,7 @@ export const isLoggedIn = (req, res, next) => {
   }
 
   // 4. set data in request object
+  req.user = decodedToken;
 
   next();
 };

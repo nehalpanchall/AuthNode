@@ -157,6 +157,8 @@ const userLogin = async (req, res) => {
   }
 };
 
-const userProfile = async (req, res) => {};
+const userProfile = async (req, res) => {
+  console.log('user object from request: ', req.user);
+};
 
 export { userRegister, userVerify, userLogin, userProfile };
