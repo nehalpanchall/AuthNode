@@ -40,7 +40,7 @@ const userRegister = async (req, res) => {
       await newUser.save();
 
       // 7. send token to the user via email (nodemailer and mailtrap)
-      await sendEmail(token, newUser.email);
+      await sendEmail(token, newUser.email, 'register');
 
       return res.status(200).json({
         message: 'User registration completed',
@@ -237,18 +237,19 @@ const forgotPassword = async (req, res) => {
     // 5. store token and token expiry in database
     user.passwordResetToken = token;
     user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-    user.save();
-
-    return res.status(200).json({
-      message: 'Link has been sent to registered mail id',
-      success: true,
-    });
+    await user.save();
 
     // 6. send token as reset link via email
+    await sendEmail(token, user.email, 'forgotpassword');
+
     // 7. return success message
+    return res.status(200).json({
+      message: 'Link has been sent to registered email id',
+      success: true,
+    });
   } catch (error) {
     return res.status(403).json({
-      message: 'something went wrong in forgotpassword',
+      message: 'Something went wrong in forgot password',
       success: false,
       error: error.message,
     });
