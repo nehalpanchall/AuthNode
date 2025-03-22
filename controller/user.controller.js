@@ -227,12 +227,23 @@ const forgotPassword = async (req, res) => {
       });
     }
 
+    console.log(user);
+
     // 4. generate token
-    const token = bcrypt.randomBytes(16).toString('hex');
+    const token = crypto.randomBytes(16).toString('hex');
 
     console.log('Random Token Generated: ', token ? 'YES' : 'NO');
 
     // 5. store token and token expiry in database
+    user.passwordResetToken = token;
+    user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    user.save();
+
+    return res.status(200).json({
+      message: 'Link has been sent to registered mail id',
+      success: true,
+    });
+
     // 6. send token as reset link via email
     // 7. return success message
   } catch (error) {
