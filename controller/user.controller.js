@@ -204,4 +204,21 @@ const userLogout = async (req, res) => {
   }
 };
 
-export { userRegister, userVerify, userLogin, userProfile, userLogout };
+const forgotPassword = async (req, res) => {
+  // 1. get email id from body
+  // 2. validate email
+  // 3. check user exist in db
+  // 4. generate token
+  // 5. store token and token expiry in database
+  // 6. send token as reset link via email
+  // 7. return success message
+};
+
+export {
+  userRegister,
+  userVerify,
+  userLogin,
+  userProfile,
+  userLogout,
+  forgotPassword,
+};
