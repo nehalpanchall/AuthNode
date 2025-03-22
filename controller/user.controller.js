@@ -228,6 +228,10 @@ const forgotPassword = async (req, res) => {
     }
 
     // 4. generate token
+    const token = bcrypt.randomBytes(16).toString('hex');
+
+    console.log('Random Token Generated: ', token ? 'YES' : 'NO');
+
     // 5. store token and token expiry in database
     // 6. send token as reset link via email
     // 7. return success message
