@@ -206,7 +206,16 @@ const userLogout = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   // 1. get email id from body
+  const { email } = req.body;
+
   // 2. validate email
+  if (!email) {
+    return res.status(400).json({
+      message: 'Please enter verified email id',
+      success: false,
+    });
+  }
+
   // 3. check user exist in db
   // 4. generate token
   // 5. store token and token expiry in database
