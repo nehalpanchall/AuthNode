@@ -216,11 +216,28 @@ const forgotPassword = async (req, res) => {
     });
   }
 
-  // 3. check user exist in db
-  // 4. generate token
-  // 5. store token and token expiry in database
-  // 6. send token as reset link via email
-  // 7. return success message
+  try {
+    // 3. check user exist in db
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: 'User not found',
+        success: false,
+      });
+    }
+
+    // 4. generate token
+    // 5. store token and token expiry in database
+    // 6. send token as reset link via email
+    // 7. return success message
+  } catch (error) {
+    return res.status(403).json({
+      message: 'something went wrong in forgotpassword',
+      success: false,
+      error: error.message,
+    });
+  }
 };
 
 export {
