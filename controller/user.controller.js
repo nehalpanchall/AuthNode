@@ -256,8 +256,22 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   // 1. get the data from body
+  const { newPassword, confirmPassword } = req.body;
+
   // 2. validate data
+  if (!newPassword || !confirmPassword) {
+    return res
+      .status(400)
+      .json({ message: 'passwords are must', success: false });
+  }
+
   // 3. compare passwords
+  if (newPassword !== confirmPassword) {
+    return res
+      .status(400)
+      .json({ message: 'passwords are not matched', success: false });
+  }
+
   // 4. get the token form params
   // 5. validate token
   // 6. get the user object based on matched token and token expiry
