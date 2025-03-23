@@ -254,6 +254,8 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {};
+
 export {
   userRegister,
   userVerify,
@@ -261,4 +263,5 @@ export {
   userProfile,
   userLogout,
   forgotPassword,
+  resetPassword,
 };

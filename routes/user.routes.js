@@ -6,6 +6,7 @@ import {
   userProfile,
   userLogout,
   forgotPassword,
+  resetPassword,
 } from '../controller/user.controller.js';
 import { isLoggedIn } from '../middleware/auth.middleware.js';
 
@@ -17,5 +18,6 @@ route.post('/login', userLogin);
 route.get('/profile', isLoggedIn, userProfile);
 route.get('/logout', isLoggedIn, userLogout);
 route.post('/forgotpassword', forgotPassword);
+route.post('/resetpassword/:token', resetPassword);
 
 export default route;
