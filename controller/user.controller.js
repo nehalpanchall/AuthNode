@@ -280,11 +280,30 @@ const resetPassword = async (req, res) => {
     return res.status(400).json({ message: 'Invalid token', success: false });
   }
 
-  // 6. get the user object based on matched token and token expiry
-  // 7. validate user
-  // 8. replace password with new password in user model
-  // 9. clear reset token and expiry from user model
-  // 10. send success message to user
+  try {
+    // 6. get the user object based on matched token and token expiry
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    // 7. validate user
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: 'User not found!', success: false });
+    }
+
+    // 8. replace password with new password in user model
+    // 9. clear reset token and expiry from user model
+    // 10. send success message to user
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Something went wrong in reset password!',
+      success: false,
+      error: error.message,
+    });
+  }
 };
 
 export {
