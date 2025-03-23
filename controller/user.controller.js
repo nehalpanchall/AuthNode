@@ -227,8 +227,6 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    console.log(user);
-
     // 4. generate token
     const token = crypto.randomBytes(16).toString('hex');
 
@@ -244,7 +242,7 @@ const forgotPassword = async (req, res) => {
 
     // 7. return success message
     return res.status(200).json({
-      message: 'Link has been sent to registered email id',
+      message: 'Reset password link has been sent to registered email id',
       success: true,
     });
   } catch (error) {
