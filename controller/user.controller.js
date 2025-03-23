@@ -22,11 +22,6 @@ const userRegister = async (req, res) => {
     if (!existingUser) {
       // 4. if not exist, create new user
       const newUser = await User.create({ userName, email, password });
-      if (newUser) {
-        return res
-          .status(200)
-          .json({ message: 'user has been created successfully' });
-      }
 
       // 5. generate random token using crypto
       const token = crypto.randomBytes(16).toString('hex');
