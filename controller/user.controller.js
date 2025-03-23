@@ -295,7 +295,13 @@ const resetPassword = async (req, res) => {
     }
 
     // 8. replace password with new password in user model
+    user.password = newPassword;
+
     // 9. clear reset token and expiry from user model
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
     // 10. send success message to user
   } catch (error) {
     return res.status(400).json({
