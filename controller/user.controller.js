@@ -273,7 +273,13 @@ const resetPassword = async (req, res) => {
   }
 
   // 4. get the token form params
+  const { token } = req.params;
+
   // 5. validate token
+  if (!token) {
+    return res.status(400).json({ message: 'Invalid token', success: false });
+  }
+
   // 6. get the user object based on matched token and token expiry
   // 7. validate user
   // 8. replace password with new password in user model
