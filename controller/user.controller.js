@@ -303,6 +303,10 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     // 10. send success message to user
+    return res.status(200).json({
+      message: 'Password has been reset successfully',
+      success: true,
+    });
   } catch (error) {
     return res.status(400).json({
       message: 'Something went wrong in reset password!',
