@@ -254,7 +254,18 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {};
+const resetPassword = async (req, res) => {
+  // 1. get the data from body
+  // 2. validate data
+  // 3. compare passwords
+  // 4. get the token form params
+  // 5. validate token
+  // 6. get the user object based on matched token and token expiry
+  // 7. validate user
+  // 8. replace password with new password in user model
+  // 9. clear reset token and expiry from user model
+  // 10. send success message to user
+};
 
 export {
   userRegister,
