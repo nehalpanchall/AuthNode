@@ -7,6 +7,12 @@ const validation = (req, res, next) => {
 
   const extractedErrors = [];
   errors.array().map((err) => extractedErrors.push({ [err.path]: err.msg }));
+
+  return res.status(400).json({
+    message: 'Error occure during validation',
+    success: false,
+    errors: extractedErrors,
+  });
 };
 
 export { validation };
