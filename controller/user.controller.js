@@ -11,10 +11,7 @@ const userRegister = async (req, res) => {
   // 1. Get the data from request body
   const { userName, email, password } = req.body;
 
-  // 2. Validate data
-  if (!userName || !email || !password) {
-    return res.status(400).json({ message: 'invalid user info' });
-  }
+  // Removed manual validation
 
   try {
     // 3. check user is already exist or not
