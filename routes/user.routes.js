@@ -9,10 +9,12 @@ import {
   resetPassword,
 } from '../controller/user.controller.js';
 import { isLoggedIn } from '../middleware/auth.middleware.js';
+import { validation } from '../middleware/validator.middleware.js';
+import { registrationValidator } from '../validator/validations.js';
 
 const route = express.Router();
 
-route.post('/register', userRegister);
+route.post('/register', registrationValidator(), validation, userRegister);
 route.get('/verify/:token', userVerify);
 route.post('/login', userLogin);
 route.get('/profile', isLoggedIn, userProfile);
