@@ -39,4 +39,18 @@ const registrationValidator = () => {
   ];
 };
 
-export { registrationValidator };
+const loginValidator = () => {
+  return [
+    body('email')
+      .trim()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Invalid email format')
+      .normalizeEmail(),
+
+    body('password').trim().notEmpty().withMessage('Password is required'),
+  ];
+};
+
+export { registrationValidator, loginValidator };

@@ -16,6 +16,7 @@ const userRegister = async (req, res) => {
   try {
     // 3. check user is already exist or not
     const existingUser = await User.findOne({ email });
+
     if (!existingUser) {
       // 4. if not exist, create new user
       const newUser = await User.create({ userName, email, password });
