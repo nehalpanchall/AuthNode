@@ -54,13 +54,15 @@ const loginValidator = () => {
 };
 
 const forgotPasswordValidator = () => {
-  body('email')
-    .trim()
-    .notEmpty()
-    .withMessage('Email is required')
-    .isEmail()
-    .withMessage('Invalid email format')
-    .normalizeEmail();
+  return [
+    body('email')
+      .trim()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Invalid email format')
+      .normalizeEmail(),
+  ];
 };
 
 export { registrationValidator, loginValidator, forgotPasswordValidator };
