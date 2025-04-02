@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 
 const registrationValidator = () => {
   return [
@@ -83,4 +83,27 @@ const forgotPasswordValidator = () => {
   ];
 };
 
-export { registrationValidator, loginValidator, forgotPasswordValidator };
+const userVerificationValidator = () => {
+  return [
+    param('token')
+      .trim()
+      .notEmpty()
+      .withMessage('Token is required!')
+      .matches(/^[a-zA-Z0-9-_]+$/)
+      .withMessage(
+        'Token should contain only alphanumeric characters, dashes (-), and underscores (_)'
+      ),
+
+    (req, res, next) => {
+      req.validatorName = 'user verification';
+      next();
+    },
+  ];
+};
+
+export {
+  registrationValidator,
+  loginValidator,
+  forgotPasswordValidator,
+  userVerificationValidator,
+};

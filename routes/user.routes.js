@@ -14,12 +14,18 @@ import {
   registrationValidator,
   loginValidator,
   forgotPasswordValidator,
+  userVerificationValidator,
 } from '../validator/validations.js';
 
 const route = express.Router();
 
 route.post('/register', registrationValidator(), validation, userRegister);
-route.get('/verify/:token', userVerify);
+route.get(
+  '/verify/:token',
+  userVerificationValidator(),
+  validation,
+  userVerify
+);
 route.post('/login', loginValidator(), validation, userLogin);
 route.get('/profile', isLoggedIn, userProfile);
 route.get('/logout', isLoggedIn, userLogout);
