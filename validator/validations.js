@@ -53,4 +53,6 @@ const loginValidator = () => {
   ];
 };
 
-export { registrationValidator, loginValidator };
+const forgotPasswordValidator = () => {};
+
+export { registrationValidator, loginValidator, forgotPasswordValidator };

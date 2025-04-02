@@ -13,6 +13,7 @@ import { validation } from '../middleware/validator.middleware.js';
 import {
   registrationValidator,
   loginValidator,
+  forgotPasswordValidator,
 } from '../validator/validations.js';
 
 const route = express.Router();
@@ -22,7 +23,12 @@ route.get('/verify/:token', userVerify);
 route.post('/login', loginValidator(), validation, userLogin);
 route.get('/profile', isLoggedIn, userProfile);
 route.get('/logout', isLoggedIn, userLogout);
-route.post('/forgotpassword', forgotPassword);
+route.post(
+  '/forgotpassword',
+  forgotPasswordValidator(),
+  validation,
+  forgotPassword
+);
 route.post('/resetpassword/:token', resetPassword);
 
 export default route;
