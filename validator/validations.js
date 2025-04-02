@@ -36,6 +36,12 @@ const registrationValidator = () => {
       .not()
       .matches(/\s/)
       .withMessage('Password cannot contain spaces'),
+
+    // middleware
+    (req, res, next) => {
+      req.validatorName = 'user registration';
+      next();
+    },
   ];
 };
 
@@ -50,6 +56,12 @@ const loginValidator = () => {
       .normalizeEmail(),
 
     body('password').trim().notEmpty().withMessage('Password is required'),
+
+    // middleware
+    (req, res, next) => {
+      req.validatorName = 'user login';
+      next();
+    },
   ];
 };
 
@@ -62,6 +74,12 @@ const forgotPasswordValidator = () => {
       .isEmail()
       .withMessage('Invalid email format')
       .normalizeEmail(),
+
+    // middleware
+    (req, res, next) => {
+      req.validatorName = 'forgot password';
+      next();
+    },
   ];
 };
 
