@@ -196,13 +196,7 @@ const forgotPassword = async (req, res) => {
   // 1. get email id from body
   const { email } = req.body;
 
-  // 2. validate email
-  if (!email) {
-    return res.status(400).json({
-      message: 'Please enter verified email id',
-      success: false,
-    });
-  }
+  // 2. Removed manual validation
 
   try {
     // 3. check user exist in db
