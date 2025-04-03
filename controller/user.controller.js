@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import sendEmail from '../utils/sendEmail.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { ApiResponse } from '../utils/api-response.js';
 
 dotenv.config();
 
@@ -35,10 +36,10 @@ const userRegister = async (req, res) => {
       // 7. send token to the user via email (nodemailer and mailtrap)
       await sendEmail(token, newUser.email, 'register');
 
-      return res.status(200).json({
-        message: 'User registration completed',
-        success: true,
-      });
+      // Instance of ApiResponse
+      const apiRes = new ApiResponse(200, 'user registered successfully!');
+
+      return res.json(apiRes);
     } else {
       return res.status(400).json({ message: 'user already exist' });
     }
@@ -68,9 +69,10 @@ const userVerify = async (req, res) => {
     userObj.verificationToken = undefined;
     await userObj.save();
 
-    return res
-      .status(200)
-      .json({ message: 'User verified successfully', success: true });
+    // Instance of ApiResponse
+    const apiRes = new ApiResponse(200, 'user verified successfully!');
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(500).json({
       message: 'Something went wrong in verify user',
@@ -125,17 +127,15 @@ const userLogin = async (req, res) => {
     res.cookie('jwtToken', jwtToken, cookieOptions);
 
     // 8. send success responses
-    return res.status(200).json({
-      message: 'Login successfully',
-      suceess: true,
-      user: {
-        id: user._id,
-        role: user.role,
-        email: user.email,
-        userName: user.userName,
-        token: jwtToken,
-      },
+    const apiRes = new ApiResponse(200, 'Login successfully!', {
+      id: user._id,
+      role: user.role,
+      email: user.email,
+      userName: user.userName,
+      token: jwtToken,
     });
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(500).json({
       message: 'Something went wrong in user login',
@@ -165,9 +165,9 @@ const userProfile = async (req, res) => {
     }
 
     // 4. return sucess message with user data except password
-    return res
-      .status(200)
-      .json({ message: 'User profile', success: true, user });
+    const apiRes = new ApiResponse(200, 'user profile', user);
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(403).json({
       message: 'Something went wrong to access user profile',
@@ -181,9 +181,10 @@ const userLogout = async (req, res) => {
     // new Date(0):  January 1, 1970, 00:00:00 UTC
     res.cookie('jwtToken', '', { expires: new Date(0) }); // Unix Time Zero
 
-    return res
-      .status(200)
-      .json({ message: 'User logged out successfully', success: true });
+    // 4. return sucess message with user data except password
+    const apiRes = new ApiResponse(200, 'user logged out successfully');
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(403).json({
       message: 'Something went wrong while logging out user',
@@ -223,10 +224,12 @@ const forgotPassword = async (req, res) => {
     await sendEmail(token, user.email, 'forgotpassword');
 
     // 7. return success message
-    return res.status(200).json({
-      message: 'Reset password link has been sent to registered email id',
-      success: true,
-    });
+    const apiRes = new ApiResponse(
+      200,
+      'reset password link has been sent to registered email id'
+    );
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(403).json({
       message: 'Something went wrong in forgot password',
@@ -285,10 +288,9 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     // 10. send success message to user
-    return res.status(200).json({
-      message: 'Password has been reset successfully',
-      success: true,
-    });
+    const apiRes = new ApiResponse(200, 'Password has been reset successfully');
+
+    return res.json(apiRes);
   } catch (error) {
     return res.status(400).json({
       message: 'Something went wrong in reset password!',
