@@ -15,19 +15,18 @@ const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
+);
 
 app.get('/', (req, res) => {
   res.send('Hello Noders');
 });
 
 app.use('/api/v1/users/', userRoute);
-
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  })
-);
 
 // Database connection
 await dbConnect();
